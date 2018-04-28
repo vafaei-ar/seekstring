@@ -3,7 +3,7 @@ mpl.use('agg')
 
 import numpy as np
 import pylab as plt
-import urllib.request
+import urllib
 import gzip
 import shutil
 import healpy as hp
@@ -59,7 +59,7 @@ print('Beginning file download with urllib2...')
 
 print('Downloading string(s)...')
 for i in range(3): 
-	urllib.request.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/2048/map1n_allz_rtaapixlw_2048_'+str(i)+'.fits.gz',
+	urllib.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/2048/map1n_allz_rtaapixlw_2048_'+str(i)+'.fits.gz',
     '../data/maps/string/'+str(i+1)+'.fits.gz')
 
 	with gzip.open('../data/maps/string/'+str(i)+'.fits.gz', 'rb') as f_in:
