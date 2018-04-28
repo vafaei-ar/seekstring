@@ -28,11 +28,11 @@ cl = cl[:lmax,1]
 if not os.path.exists('../data/maps/gaussian/'):
 	os.makedirs('../data/maps/gaussian/') 
 
-print('Simulation gaussian maps...')
-
 for i in range(n_gaussian):
 
 	if not os.path.exists('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits'):
+		print('Simulation gaussian map: '+str(i))
+
 		m,alms = hp.sphtfunc.synfast(cl, nside=nside, lmax=lmax, mmax=None, alm=True, pol=False, pixwin=False, fwhm=fwhm, sigma=None, new=1, verbose=0)
 		cl_map = hp.sphtfunc.alm2cl(alms)
 
