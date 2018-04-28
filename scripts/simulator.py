@@ -16,24 +16,24 @@ cmap = plt.cm.jet
 cmap.set_under('w')
 cmap.set_bad('gray',1.)
 
-
-
-
 parser = argparse.ArgumentParser(description='Short sample app')
-
-parser.add_argument('-a', action="store_true", default=False)
-parser.add_argument('-b', action="store", dest="b")
-parser.add_argument('-c', action="store", dest="c", type=int)
-print parser.parse_args(['-a', '-bval', '-c', '3'])
-
-exit()
-
-n_gaussian = 10
-
-nside = 2048
-lmax = 3500
-fwhm = float(sys.argv[1])
+parser.add_argument('-r', action="store_true", default=False)
+parser.add_argument('--nside', action="store", type=int, default=2048)
+parser.add_argument('--lmax', action="store", type=int, default=3500)
+parser.add_argument('--fwhm', action="store", type=float, default=0.0)
+parser.add_argument('--nsim', action="store", type=int, default=10)
+args = parser.parse_args()
+replace = args.r
+nside = args.nside
+lmax = args.lmax
+fwhm = args.fwhm
 fwhm = fwhm*np.pi/(180*60)
+n_gaussian = args.nsim
+
+#n_gaussian = 10
+#nside = 2048
+#lmax = 3500
+#fwhm = float(sys.argv[1])
 
 cl = np.loadtxt('../data/cl_planck_lensed')
 ll = cl[:lmax,0]
@@ -44,7 +44,7 @@ if not os.path.exists('../data/maps/gaussian/'):
 
 for i in range(n_gaussian):
 
-	if not os.path.exists('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits'):
+	if not os.path.exists('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits') or replace:
 		print('Simulation gaussian map: '+str(i))
 
 		m,alms = hp.sphtfunc.synfast(cl, nside=nside, lmax=lmax, mmax=None, alm=True, pol=False, pixwin=False, fwhm=fwhm, sigma=None, new=1, verbose=0)
