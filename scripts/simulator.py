@@ -8,7 +8,6 @@ import gzip
 import shutil
 import healpy as hp
 from healpy import cartview
-from seekstring.utils import ch_mkdir
 
 cmap = plt.cm.jet
 cmap.set_under('w')
@@ -24,6 +23,9 @@ fwhm = fwhm*np.pi/(180*60)
 cl = np.loadtxt('../data/cl_planck_lensed')
 ll = cl[:lmax,0]
 cl = cl[:lmax,1]
+
+if not os.path.exists('../data/maps/gaussian/'):
+	os.makedirs('../data/maps/gaussian/') 
 
 print('Simulation gaussian maps...')
 
@@ -58,12 +60,26 @@ for i in range(n_gaussian):
 
 print('Beginning file download with urllib2...')
 
+if not os.path.exists('../data/maps/string/'):
+	os.makedirs('../data/maps/string/') 
+	
 print('Downloading string(s)...')
 for i in range(3): 
-	urllib.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/2048/map1n_allz_rtaapixlw_2048_'+str(i)+'.fits.gz',
-    '../data/maps/string/'+str(i+1)+'.fits.gz')
 
-	with gzip.open('../data/maps/string/'+str(i)+'.fits.gz', 'rb') as f_in:
-		with open('../data/maps/string/'+str(i)+'.fits', 'wb') as f_out:
-			shutil.copyfileobj(f_in, f_out)
+	if not os.path.exists('../data/maps/string/'+str(i+1)+'.fits.gz'):
+		urllib.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/'+str(nside)+'/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz',
+		  '../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz')
+
+	if not os.path.exists('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits'):
+		with gzip.open('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz', 'rb') as f_in:
+			with open('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits', 'wb') as f_out:
+				shutil.copyfileobj(f_in, f_out)
+				
+	if fwhm!=0.0:
+		ss = hp.read_map('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits')
+		ss = hp.sphtfunc.smoothing(ss,fwhm=fwhm)
+		hp.write_map('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'_'+str(fwhm)+'.fits', ss, overwrite=1)
+		
+			
+			
 
