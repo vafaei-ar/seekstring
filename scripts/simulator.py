@@ -3,6 +3,7 @@ mpl.use('agg')
 
 import os
 import sys
+import argparse
 import numpy as np
 import pylab as plt
 import urllib
@@ -14,6 +15,18 @@ from healpy import cartview
 cmap = plt.cm.jet
 cmap.set_under('w')
 cmap.set_bad('gray',1.)
+
+
+
+
+parser = argparse.ArgumentParser(description='Short sample app')
+
+parser.add_argument('-a', action="store_true", default=False)
+parser.add_argument('-b', action="store", dest="b")
+parser.add_argument('-c', action="store", dest="c", type=int)
+print parser.parse_args(['-a', '-bval', '-c', '3'])
+
+exit()
 
 n_gaussian = 10
 
@@ -31,7 +44,7 @@ if not os.path.exists('../data/maps/gaussian/'):
 
 for i in range(n_gaussian):
 
-	if not os.path.exists('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits'):
+	if True & not os.path.exists('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits'):
 		print('Simulation gaussian map: '+str(i))
 
 		m,alms = hp.sphtfunc.synfast(cl, nside=nside, lmax=lmax, mmax=None, alm=True, pol=False, pixwin=False, fwhm=fwhm, sigma=None, new=1, verbose=0)
