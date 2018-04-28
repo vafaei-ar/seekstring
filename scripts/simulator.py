@@ -30,6 +30,11 @@ fwhm = args.fwhm
 fwhm = fwhm*np.pi/(180*60)
 n_gaussian = args.nsim
 
+if nside==2048:
+	n_string=3
+else:
+	n_string=1
+
 #n_gaussian = 10
 #nside = 2048
 #lmax = 3500
@@ -79,7 +84,7 @@ if not os.path.exists('../data/maps/string/'):
 	os.makedirs('../data/maps/string/') 
 	
 
-for i in range(3): 
+for i in range(n_string): 
 
 	if not os.path.exists('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz'):
 		print('Downloading string(s)...')
