@@ -87,7 +87,7 @@ if not os.path.exists('../data/maps/string/'):
 for i in range(n_string): 
 
 	if not os.path.exists('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz'):
-		print('Downloading string(s)...')
+		print('Downloading string: '+str(i))
 		urllib.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/'+str(nside)+'/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz',
 		  '../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz')
 
