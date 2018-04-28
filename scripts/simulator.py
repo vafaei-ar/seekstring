@@ -43,9 +43,9 @@ for i in range(n_gaussian):
 
 	dl1 = []
 	dl2 = []
-	for i in range(ll.shape[0]):
-		  dl1.append(ll[i]*(ll[i]+1)*cl[i]/(2*np.pi))
-		  dl2.append(ll[i]*(ll[i]+1)*cl_map[i]/(2*np.pi))
+	for j in range(ll.shape[0]):
+		  dl1.append(ll[j]*(ll[j]+1)*cl[j]/(2*np.pi))
+		  dl2.append(ll[j]*(ll[j]+1)*cl_map[j]/(2*np.pi))
 
 	plt.plot(ll,dl2,'r--',label='Simulation')
 	plt.plot(ll,dl1,'b--',lw=2,label='Orginal')
@@ -59,15 +59,14 @@ for i in range(n_gaussian):
 	plt.savefig('../data/maps/gaussian/power_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.jpg')
 	plt.close()
 
-print('Beginning file download with urllib2...')
-
 if not os.path.exists('../data/maps/string/'):
 	os.makedirs('../data/maps/string/') 
 	
-print('Downloading string(s)...')
+
 for i in range(3): 
 
-	if not os.path.exists('../data/maps/string/'+str(i+1)+'.fits.gz'):
+	if not os.path.exists('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz'):
+		print('Downloading string(s)...')
 		urllib.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/'+str(nside)+'/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz',
 		  '../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz')
 
