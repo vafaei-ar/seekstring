@@ -8,6 +8,7 @@ import gzip
 import shutil
 import healpy as hp
 from healpy import cartview
+from seekstring.utils import ch_mkdir
 
 cmap = plt.cm.jet
 cmap.set_under('w')
