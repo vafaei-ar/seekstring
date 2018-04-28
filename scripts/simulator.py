@@ -97,7 +97,7 @@ for i in range(n_string):
 				shutil.copyfileobj(f_in, f_out)
 				
 	if fwhm!=0.0:
-		ss = hp.read_map('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits')
+		ss = hp.read_map('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits',verbose=0)
 		ss = hp.sphtfunc.smoothing(ss,fwhm=fwhm)
 		hp.write_map('../data/maps/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'_'+str(fwhm)+'.fits', ss, overwrite=1)
 		
