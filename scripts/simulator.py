@@ -31,33 +31,35 @@ if not os.path.exists('../data/maps/gaussian/'):
 print('Simulation gaussian maps...')
 
 for i in range(n_gaussian):
-	m,alms = hp.sphtfunc.synfast(cl, nside=nside, lmax=lmax, mmax=None, alm=True, pol=False, pixwin=False, fwhm=fwhm, sigma=None, new=1, verbose=0)
-	cl_map = hp.sphtfunc.alm2cl(alms)
 
-	hp.mollview(m, nest=0, cmap=cmap)
-	hp.write_map('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits', m, overwrite=1)
-	plt.savefig('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.jpg')
-	plt.close()
+	if not os.path.exists('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits'):
+		m,alms = hp.sphtfunc.synfast(cl, nside=nside, lmax=lmax, mmax=None, alm=True, pol=False, pixwin=False, fwhm=fwhm, sigma=None, new=1, verbose=0)
+		cl_map = hp.sphtfunc.alm2cl(alms)
 
-	plt.figure(figsize=(10,6))
+		hp.mollview(m, nest=0, cmap=cmap)
+		hp.write_map('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits', m, overwrite=1)
+		plt.savefig('../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.jpg')
+		plt.close()
 
-	dl1 = []
-	dl2 = []
-	for j in range(ll.shape[0]):
-		  dl1.append(ll[j]*(ll[j]+1)*cl[j]/(2*np.pi))
-		  dl2.append(ll[j]*(ll[j]+1)*cl_map[j]/(2*np.pi))
+		plt.figure(figsize=(10,6))
 
-	plt.plot(ll,dl2,'r--',label='Simulation')
-	plt.plot(ll,dl1,'b--',lw=2,label='Orginal')
-	plt.xscale('log')
-	plt.yscale('log')
-	plt.tick_params(labelsize=15)
-	plt.xlabel(r'$\ell$',fontsize=25)
-	plt.ylabel(r'$D_{\ell}$',fontsize=25)
+		dl1 = []
+		dl2 = []
+		for j in range(ll.shape[0]):
+				dl1.append(ll[j]*(ll[j]+1)*cl[j]/(2*np.pi))
+				dl2.append(ll[j]*(ll[j]+1)*cl_map[j]/(2*np.pi))
 
-	plt.legend(loc='best',fontsize=20)
-	plt.savefig('../data/maps/gaussian/power_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.jpg')
-	plt.close()
+		plt.plot(ll,dl2,'r--',label='Simulation')
+		plt.plot(ll,dl1,'b--',lw=2,label='Orginal')
+		plt.xscale('log')
+		plt.yscale('log')
+		plt.tick_params(labelsize=15)
+		plt.xlabel(r'$\ell$',fontsize=25)
+		plt.ylabel(r'$D_{\ell}$',fontsize=25)
+
+		plt.legend(loc='best',fontsize=20)
+		plt.savefig('../data/maps/gaussian/power_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.jpg')
+		plt.close()
 
 if not os.path.exists('../data/maps/string/'):
 	os.makedirs('../data/maps/string/') 
