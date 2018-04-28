@@ -17,8 +17,8 @@ cmap.set_bad('gray',1.)
 n_gaussian = 10
 
 nside = 2048
-lmax = 2500
-fwhm = 0.0
+lmax = 3500
+fwhm = float(sys.argv[1])
 fwhm = fwhm*np.pi/(180*60)
 
 cl = np.loadtxt('../data/cl_planck_lensed')
