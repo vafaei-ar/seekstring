@@ -19,7 +19,6 @@ replace = args.r
 nside = args.nside
 lmax = args.lmax
 fwhm = args.fwhm
-fwhm = args.fwhm
 n_gaussian = args.nsim
 gmu = args.gmu
 noise = args.noise
