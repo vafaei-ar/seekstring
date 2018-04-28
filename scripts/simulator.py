@@ -1,6 +1,7 @@
 import matplotlib as mpl
 mpl.use('agg')
 
+import os
 import numpy as np
 import pylab as plt
 import urllib
