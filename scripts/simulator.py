@@ -62,7 +62,7 @@ for i in range(3):
 	urllib.request.urlretrieve('http://cp3.irmp.ucl.ac.be/~ringeval/upload/data/2048/map1n_allz_rtaapixlw_2048_'+str(i)+'.fits.gz',
     '../data/maps/string/'+str(i+1)+'.fits.gz')
 
-    with gzip.open('../data/maps/string/'+str(i)+'.fits.gz', 'rb') as f_in:
-        with open('../data/maps/string/'+str(i)+'.fits', 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
+	with gzip.open('../data/maps/string/'+str(i)+'.fits.gz', 'rb') as f_in:
+		with open('../data/maps/string/'+str(i)+'.fits', 'wb') as f_out:
+			shutil.copyfileobj(f_in, f_out)
 
