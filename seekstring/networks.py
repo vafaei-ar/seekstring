@@ -2,7 +2,7 @@ import os
 import sys
 import numpy as np
 import tensorflow as tf
-from util import ch_mkdir
+from utils import ch_mkdir
 
 class ConvolutionalLayers(object):
 	"""
