@@ -7,7 +7,8 @@
 #SBATCH --gres=gpu:pascal:1
 #SBATCH --mem=30000
 
-module load CUDA
+#module load CUDA
+module load cuDNN/6.0-CUDA-8.0.61
 
 # see here for more samples:
 # /opt/cudasample/NVIDIA_CUDA-8.0_Samples/bin/x86_64/linux/release/
@@ -15,5 +16,5 @@ module load CUDA
 # if you need to know the allocated CUDA device, you can obtain it here:
 echo $CUDA_VISIBLE_DEVICES
 
-srun tfpython $1 $2 $3
+srun tfpython $1 $2 $3 $4 $5 $6 $7
 
