@@ -41,7 +41,7 @@ model_add = './models/model_'+str(nside)+'_'+str(fwhm)
 #gmu = 0.5
 
 def func(dt):
-    return canny(dt,0,'none','sch')
+    return ss.canny(dt,0,'none','sch')
 
 def filt_all(maps,func):
     out1 = []
