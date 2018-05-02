@@ -68,8 +68,8 @@ dp_string = ss.Data_Provider(strings,dtype = np.float32,coef=gmu)
 
 conv = ss.ConvolutionalLayers(nx=200,ny=200,n_channel=1,restore=os.path.exists(model_add),model_add=model_add,arch_file_name='arch')
 
-conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = 0.0001, dropout=0.7, time_limit=3, verbose=1)
-
-conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = 0.00001, dropout=0.7, time_limit=3, verbose=1)
+for i in range(5):
+	conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = learning_rate, dropout=0.7, time_limit=time_limit, verbose=1)
+	learning_rate = learning_rate/5.
 
 
