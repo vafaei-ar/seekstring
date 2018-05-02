@@ -59,11 +59,12 @@ class ConvolutionalLayers(object):
 	|		2D convolved image.
 	
 	"""
-	def __init__(self,nx=276,ny=400,learning_rate = 0.001,n_channel=1,restore=False,model_add='./model',arch_file_name=None):
+	def __init__(self,nx=276,ny=400,n_channel=1,restore=False,model_add='./model',arch_file_name=None):
 
 		self.model_add = model_add
 		self.x_in = tf.placeholder(tf.float32,[None,nx,ny,n_channel])
 		self.y_true = tf.placeholder(tf.float32,[None,nx,ny,1])
+		self.learning_rate = tf.placeholder(tf.float32)
 		self.drop_out = tf.placeholder(tf.float32)
 		self.nx = nx
 		self.ny = ny
@@ -99,7 +100,7 @@ class ConvolutionalLayers(object):
 		self.cost = tf.reduce_sum(tf.pow(self.y_true - self.x_out, 2))
 #		self.cost = tf.losses.log_loss(self.y_true,self.x_out)
 
-		self.optimizer = tf.train.RMSPropOptimizer(learning_rate).minimize(self.cost)
+		self.optimizer = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.cost)
 #		self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(self.cost)
 
 		self.sess = tf.InteractiveSession()
@@ -116,7 +117,7 @@ class ConvolutionalLayers(object):
 		tf.reset_default_graph()
 		self.saver.restore(self.sess, self.model_add+'/model')
 
-	def train(self, data_provider,training_epochs = 1,n_s = 1, dropout=0.5, time_limit=None, verbose=0):
+	def train(self, data_provider,training_epochs = 1,n_s = 1, learning_rate = 0.001, dropout=0.5, time_limit=None, verbose=0):
 
 		if time_limit is not None:
 			import time
@@ -132,7 +133,7 @@ class ConvolutionalLayers(object):
 				        if xb is not None:
 				            break
 				    # Run optimization op (backprop) and cost op (to get loss value)
-				    _, c = self.sess.run([self.optimizer, self.cost], feed_dict={self.x_in: xb, self.y_true: yb, self.drop_out: dropout})
+				    _, c = self.sess.run([self.optimizer, self.cost], feed_dict={self.x_in: xb, self.y_true: yb, self.drop_out: dropout, self.learning_rate: learning_rate})
 				    cc += c
 				    ii += 1
 				# Display logs per epoch step
