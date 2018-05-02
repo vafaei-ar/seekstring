@@ -15,7 +15,7 @@ parser.add_argument('--nsim', action="store", type=int, default=10)
 parser.add_argument('--gmu', action="store", type=float, default=0.5)
 parser.add_argument('--noise', action="store", type=float, default=0.0)
 parser.add_argument('--time_limit', action="store", type=int, default=60)
-
+parser.add_argument('--learning_rate', action="store", type=float, default=0.0001)
 args = parser.parse_args()
 replace = args.r
 nside = args.nside
@@ -25,6 +25,7 @@ n_gaussian = args.nsim
 gmu = args.gmu
 noise = args.noise
 time_limit = args.time_limit
+learning_rate = args.learning_rate
 
 if nside==2048:
 	n_string=3
@@ -65,7 +66,7 @@ def dp_total(n):
 dp_gaussian = ss.Data_Provider(gaussians,dtype = np.float32)
 dp_string = ss.Data_Provider(strings,dtype = np.float32,coef=gmu)
 
-conv = ss.ConvolutionalLayers(nx=200,ny=200,learning_rate = 0.001,n_channel=1,restore=os.path.exists(model_add),
+conv = ss.ConvolutionalLayers(nx=200,ny=200,learning_rate = learning_rate,n_channel=1,restore=os.path.exists(model_add),
                         model_add=model_add,arch_file_name='arch')
 
 conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100, dropout=0.7, time_limit=time_limit, verbose=1)
