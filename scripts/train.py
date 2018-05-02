@@ -35,7 +35,7 @@ gaussians = ['../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)
 
 strings = ['../data/maps/string/map1n_allz_rtaapixlw_2048_'+str(i+1)+'.fits' for i in range(n_string)]
 
-model_add = './models/model_'+str(nside)+'_'+str(fwhm)
+model_add = './models/model_'+str(nside)+'_'+str(fwhm)+'_'+str(gmu)
 
 #nside = 2048
 #lmax = 2500
