@@ -66,13 +66,10 @@ def dp_total(n):
 dp_gaussian = ss.Data_Provider(gaussians,dtype = np.float32)
 dp_string = ss.Data_Provider(strings,dtype = np.float32,coef=gmu)
 
-conv = ss.ConvolutionalLayers(nx=200,ny=200,learning_rate = 0.0001,n_channel=1,restore=os.path.exists(model_add),
-                        model_add=model_add,arch_file_name='arch')
+conv = ss.ConvolutionalLayers(nx=200,ny=200,n_channel=1,restore=os.path.exists(model_add),model_add=model_add,arch_file_name='arch')
 
-conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100, dropout=0.7, time_limit=3, verbose=1)
+conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = 0.0001, dropout=0.7, time_limit=3, verbose=1)
 
-conv = ss.ConvolutionalLayers(nx=200,ny=200,learning_rate = 0.00001,n_channel=1,restore=os.path.exists(model_add),
-                        model_add=model_add,arch_file_name='arch')
+conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = 0.00001, dropout=0.7, time_limit=3, verbose=1)
 
-conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100, dropout=0.7, time_limit=3, verbose=1)
 
