@@ -1,8 +1,6 @@
 import os
 import numpy as np
 import healpy as hp
-import tensorflow as tf
-import pylab as plt
 
 if not os.path.exists('./sky2face.so'):
 	os.system('f2py -c -m sky2face ./f90_src/sky2face.f90')
