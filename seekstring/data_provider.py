@@ -41,7 +41,6 @@ class Data_Provider(object):
             files = [files]
         self.files = files
         n_files = len(files)
-        print self.files
         
         fits_hdu = hp.fitsfunc._get_hdu(files[0], hdu=1, memmap=False)
         self.nside = fits_hdu.header.get('NSIDE')
@@ -58,7 +57,7 @@ class Data_Provider(object):
         return sky_to_patch(m,1,12,lp)
 
     def cycle(self):
-        self.file_name = np.random.choice(len(self.files))
+        self.file_name = np.random.choice(self.files)
         print(self.file_name+' is in process ...')
         self.patchs = self.read_file(self.file_name)    
 
