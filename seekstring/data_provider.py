@@ -25,7 +25,7 @@ class Data_Provider(object):
     |        Image, Demand map, coordinates (if coord is true)
     """
 
-    def __init__(self,files_list,
+    def __init__(self,files,
                  n_cycle = None,
                  dtype = np.float16):
                  
