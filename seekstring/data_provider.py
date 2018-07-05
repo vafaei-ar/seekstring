@@ -74,7 +74,7 @@ class Data_Provider(object):
             face = np.random.randint(self.n_patch)
             i0 = np.random.randint(nside-w_size)
             j0 = np.random.randint(nside-w_size)
-            xx = self.patchs[face,i0:i0+l,j0:j0+w_size]
+            xx = self.patchs[face,i0:i0+w_size,j0:j0+w_size]
 
             xx = np.rot90(xx,np.random.randint(4))
             if 0 == np.random.randint(2):
