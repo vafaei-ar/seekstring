@@ -54,7 +54,7 @@ class Data_Provider(object):
         m = hp.read_map(file_name,dtype=self.dtype,verbose=0,nest=1)
         self.mean = np.mean(m)
         self.std = np.std(m)
-        return sky_to_patch(m,1,12,lp)
+        return sky_to_patch(m,1,12,self.nside)
 
     def cycle(self):
         self.file_name = np.random.choice(self.files)
