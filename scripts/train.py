@@ -69,6 +69,7 @@ dp_string = ss.Data_Provider(strings,dtype = np.float32,coef=gmu)
 conv = ss.ConvolutionalLayers(nx=200,ny=200,n_channel=1,restore=os.path.exists(model_add),model_add=model_add,arch_file_name='arch')
 
 for i in range(5):
+    print('Training stage: '+str(i))
 	conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = learning_rate, dropout=0.7, time_limit=time_limit, verbose=1)
 	learning_rate = learning_rate/5.
 
