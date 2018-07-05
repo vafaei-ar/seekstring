@@ -57,7 +57,7 @@ class Data_Provider(object):
 
     def cycle(self):
         self.file_name = np.random.choice(len(self.files))
-        self.patchs = self.read_file(file_name)    
+        self.patchs = self.read_file(self.file_name)    
 
     def __call__(self,num,w_size):
         nside = self.nside
