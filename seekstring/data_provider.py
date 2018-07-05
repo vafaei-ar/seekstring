@@ -31,6 +31,7 @@ class Data_Provider(object):
                  
         npatch = 1
         numpa = 12
+        assert n_cycle==0, 'Please! n_cycle have to be greater than 1!'
         if n_cycle is None:
             n_cycle = 100
         self.n_cycle = n_cycle
@@ -63,9 +64,9 @@ class Data_Provider(object):
 
     def __call__(self,num,w_size):
         nside = self.nside
-        self.n_call += 1
-        if self.n_call%self.n_cycle==1:
+        if self.n_call%self.n_cycle==0:
             self.cycle()
+        self.n_call += 1
         
         assert w_size<nside,'ERROR!'
         x = np.zeros((num,w_size,w_size))
