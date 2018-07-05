@@ -43,9 +43,7 @@ class Data_Provider(object):
         
         fits_hdu = hp.fitsfunc._get_hdu(files[0], hdu=1, memmap=False)
         self.nside = fits_hdu.header.get('NSIDE')
-        lp = nside
-
-        self.n_patch = int(12*(nside/lp)**2)
+        self.n_patch = 12
 #            nest_ordering = fits_hdu.header.get('ORDERING')
 
 #        print("Data Loaded:\n\tpatch number=%d\n\tsize in byte=%d" % (self.n_patch, self.patchs.nbytes))
