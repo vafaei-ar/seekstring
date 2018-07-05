@@ -28,9 +28,9 @@ time_limit = args.time_limit
 learning_rate = args.learning_rate
 
 if nside==2048:
-	n_string=3
+    n_string=3
 else:
-	n_string=1
+    n_string=1
 
 gaussians = ['../data/maps/gaussian/'+'map_'+str(nside)+'_'+str(fwhm)+'_'+str(i)+'.fits' for i in range(n_gaussian)]
 
@@ -70,7 +70,7 @@ conv = ss.ConvolutionalLayers(nx=200,ny=200,n_channel=1,restore=os.path.exists(m
 
 for i in range(5):
     print('Training stage: '+str(i))
-	conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = learning_rate, dropout=0.7, time_limit=time_limit, verbose=1)
-	learning_rate = learning_rate/5.
+    conv.train(data_provider=dp_total,training_epochs = 10000000,n_s = 100,learning_rate = learning_rate, dropout=0.7, time_limit=time_limit, verbose=1)
+    learning_rate = learning_rate/5.
 
 
