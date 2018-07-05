@@ -1,10 +1,6 @@
 import os
 import numpy as np
 import healpy as hp
-
-if not os.path.exists('./sky2face.so'):
-    os.system('f2py -c -m sky2face ./f90_src/sky2face.f90')
-
 from sky2face import sky_to_patch
 
 class Data_Provider(object):
