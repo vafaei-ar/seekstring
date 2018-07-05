@@ -31,10 +31,10 @@ class Data_Provider(object):
                  
         npatch = 1
         numpa = 12
-        assert n_cycle==0, 'Please! n_cycle have to be greater than 1!'
         if n_cycle is None:
             n_cycle = 100
         self.n_cycle = n_cycle
+        assert n_cycle==0, 'Please! n_cycle have to be greater than 1!'
         self.dtype = dtype
         self.n_call = 0
         
