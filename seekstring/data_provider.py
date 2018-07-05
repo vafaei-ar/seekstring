@@ -34,6 +34,7 @@ class Data_Provider(object):
         if n_cycle is None:
             n_cycle = 100
         self.n_cycle = n_cycle
+        self.dtype = dtype
         self.n_call = 0
         
         if type(files) is not list:
@@ -50,7 +51,7 @@ class Data_Provider(object):
 #        print("\tmin value=%f\n\tmax value=%f\n\tmean value=%f\n\tSTD value=%f" % (self.min, self.max, self.mean, self.std))
 
     def read_file(self,file_name):
-        m = hp.read_map(file_name,dtype=dtype,verbose=0,nest=1)
+        m = hp.read_map(file_name,dtype=self.dtype,verbose=0,nest=1)
         self.mean = np.mean(m)
         self.std = np.std(m)
         return sky_to_patch(m,1,12,lp)
