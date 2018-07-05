@@ -41,6 +41,7 @@ class Data_Provider(object):
             files = [files]
         self.files = files
         n_files = len(files)
+        print self.files
         
         fits_hdu = hp.fitsfunc._get_hdu(files[0], hdu=1, memmap=False)
         self.nside = fits_hdu.header.get('NSIDE')
