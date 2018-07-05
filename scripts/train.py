@@ -59,12 +59,12 @@ def dp_total(n):
     string = dp_string(n,l)
     gaussian = dp_gaussian(n,l)
     y = filt_all(string,func).reshape(n,l,l,1)
-    x = (gaussian+string).reshape(n,l,l,1) 
+    x = (10*gaussian+string).reshape(n,l,l,1) 
     return x,y
     
 
 dp_gaussian = ss.Data_Provider(gaussians,dtype = np.float32)
-dp_string = ss.Data_Provider(strings,dtype = np.float32,coef=gmu)
+dp_string = ss.Data_Provider(strings,dtype = np.float32)
 
 conv = ss.ConvolutionalLayers(nx=200,ny=200,n_channel=1,restore=os.path.exists(model_add),model_add=model_add,arch_file_name='arch')
 
