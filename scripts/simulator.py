@@ -20,7 +20,7 @@ parser = argparse.ArgumentParser(description='Short sample app')
 parser.add_argument('-r', action="store_true", default=False)
 parser.add_argument('--nside', action="store", type=int, default=2048)
 parser.add_argument('--lmax', action="store", type=int, default=3500)
-parser.add_argument('--fwhm', action="store", type=float, default=0.0)
+parser.add_argument('--fwhm', action="store", type=float, default=1.0)
 parser.add_argument('--nsim', action="store", type=int, default=10)
 args = parser.parse_args()
 replace = args.r
@@ -33,8 +33,10 @@ n_gaussian = args.nsim
 
 if nside==2048:
 	n_string=3
+elif nside==4096:
+    n_string=1
 else:
-	n_string=1
+	assert 0,'Nside have to be either 2048 or 4096!'
 
 #n_gaussian = 10
 #nside = 2048
