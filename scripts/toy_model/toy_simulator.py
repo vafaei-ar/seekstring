@@ -1,5 +1,5 @@
-#import matplotlib as mpl
-#mpl.use('agg')
+import matplotlib as mpl
+mpl.use('agg')
 
 import numpy as np
 import pylab as plt
@@ -41,7 +41,7 @@ cl = np.loadtxt('../../data/cl_planck_lensed')
 sfs = StochasticFieldSimulator(cl)
 ch_mkdir(mode+'_set')
 
-print (moed+' set simulation...')
+print (mode+' set simulation...')
 
 print('string ...')
 x = ss.string(ns=nstring)
