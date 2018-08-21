@@ -18,15 +18,6 @@ except ImportError:
 from numpy.distutils.core import Extension
 from numpy.distutils.core import setup
 
-extensions = Extension(name = 'sky2face',
-#                 extra_compile_args = ['-O3'],
-                 sources = ['f90_src/sky2face.f90'],
-                 libraries=['gfortran'] 
-                 )
-
-extensions.extra_f77_compile_args = []
-extensions.extra_f90_compile_args = []
-
 requires = [] #during runtime
 tests_require=['pytest>=2.3'] #for testing
 
@@ -57,8 +48,7 @@ setup(
 		  'Programming Language :: Python :: 3',
 		  'Programming Language :: Python :: 3.3',
 		  'Programming Language :: Fortran',
-	],
-	ext_modules=[extensions]
+	]
 )
 
 remove_dir('build')

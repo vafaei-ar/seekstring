@@ -1,8 +1,12 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 import os
 import sys
 import numpy as np
 import tensorflow as tf
-from utils import ch_mkdir,the_print
+from .utils import ch_mkdir,the_print
 
 class ConvolutionalLayers(object):
     """
@@ -73,7 +77,11 @@ class ConvolutionalLayers(object):
         if arch_file_name is not None:
             if arch_file_name[-3:]=='.py':
                 arch_file_name = arch_file_name[-3:]
-            exec 'import '+arch_file_name+' as arch'
+            exec('import '+arch_file_name+' as arch')
+            try:
+                os.remove(arch_file_name+'.pyc')
+            except:
+                pass
             self.outputs = arch.architecture(self.x_in, self.drop_out)
             if type(self.outputs) is list:
                 self.x_out = self.outputs[0]
@@ -101,8 +109,8 @@ class ConvolutionalLayers(object):
         self.cost = tf.reduce_sum(tf.pow(self.y_true - self.x_out, 2))
 #        self.cost = tf.losses.log_loss(self.y_true,self.x_out)
 
-        self.optimizer = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.cost)
-#        self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(self.cost)
+#        self.optimizer = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.cost)
+        self.optimizer = tf.train.AdamOptimizer(learning_rate).minimize(self.cost)
 
         self.sess = tf.InteractiveSession()
         self.saver = tf.train.Saver()
@@ -139,11 +147,11 @@ class ConvolutionalLayers(object):
                 # Display logs per epoch step
                 if verbose:
                     if epoch%verbose==0:
-                        print 'Epoch:{:d}, cost= {:f}'.format(epoch, cc/ii)
+                        print('Epoch:{:d}, cost= {:f}'.format(epoch, cc/ii))
                 if time_limit is not None:
                     t1 = time.time()
                     if (t1-t0)/60>time_limit:
-                        the_print("Time's up, goodbye!",tc='black',bgc='blue')
+                        the_print("Time's up, goodbye!",tc='red',bgc='green')
                         ch_mkdir(self.model_add)
                         self.saver.save(self.sess, self.model_add+'/model')
                         return 0
