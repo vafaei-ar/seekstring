@@ -58,6 +58,11 @@ def the_print(text,style='bold',tc='gray',bgc='red'):
     form = ';'.join([str(style), str(fg), str(bg)])
     print('\x1b[%sm %s \x1b[0m' % (form, text))
 
+def report(count, blockSize, totalSize):
+  	percent = int(count*blockSize*100/(totalSize))
+  	sys.stdout.write("\r%d%%" % percent + ' complete')
+  	sys.stdout.flush()
+
 def connected(url='http://www.google.com/'):
     timeout=5
     try:
@@ -72,7 +77,6 @@ def download(getFile, saveFile=None):
     if saveFile is None:
         saveFile = getFile.split('/')[-1]
     sys.stdout.write('\rFetching ' + saveFile + '...\n')
-    urllib.urlretrieve(getFile, saveFile, reporthook=report)
     try:
         urllib.urlretrieve(getFile, saveFile, reporthook=report)
     except:
