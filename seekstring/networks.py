@@ -109,8 +109,8 @@ class ConvolutionalLayers(object):
         self.cost = tf.reduce_sum(tf.pow(self.y_true - self.x_out, 2))
 #        self.cost = tf.losses.log_loss(self.y_true,self.x_out)
 
-        self.optimizer = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.cost)
-#        self.optimizer = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
+#        self.optimizer = tf.train.RMSPropOptimizer(self.learning_rate).minimize(self.cost)
+        self.optimizer = tf.train.AdamOptimizer(self.learning_rate).minimize(self.cost)
 
         self.sess = tf.InteractiveSession()
         self.saver = tf.train.Saver()
