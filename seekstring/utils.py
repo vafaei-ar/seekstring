@@ -50,3 +50,15 @@ def the_print(text,style='bold',tc='gray',bgc='red'):
     
     form = ';'.join([str(style), str(fg), str(bg)])
     print('\x1b[%sm %s \x1b[0m' % (form, text))
+
+def download(getFile, saveFile=None):
+    assert connected(),'Error! check your Internet connection.'
+    if saveFile is None:
+        saveFile = getFile.split('/')[-1]
+    sys.stdout.write('\rFetching ' + saveFile + '...\n')
+    try:
+        urllib.urlretrieve(getFile, saveFile, reporthook=report)
+    except:
+        urllib.request.urlretrieve(getFile, saveFile, reporthook=report)
+    sys.stdout.write("\rDownload complete, saved as %s" % (saveFile) + '\n\n')
+    sys.stdout.flush()

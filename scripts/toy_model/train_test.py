@@ -18,12 +18,10 @@ time_limit = args.time_limit
 learning_rate = args.learning_rate
 
 w_size = 128
-
-time_limit = 3
 model_add = 'model'
 
-files = ['training_set/m_'+str(i)+'.npy' for i in range(1)]
-fx_files = ['training_set/f_'+str(i)+'.npy' for i in range(1)]
+files = ['training_set/s_'+str(i)+'.npy' for i in range(51)]
+fx_files = ['training_set/f_'+str(i)+'.npy' for i in range(51)]
 
 dp = ssg.Data_Provider2(files=files,fx_files=fx_files,
                         wx=w_size,wy=w_size)
@@ -34,7 +32,7 @@ conv = ssg.ConvolutionalLayers(nx=w_size,ny=w_size,n_channel=1,
                                arch_file_name='arch_0')
 
 if args.train:
-    for i in range(1):
+    for i in range(5):
         print('Training stage: '+str(i))
         conv.train(data_provider=dp,training_epochs = 10000000,
                    n_s = 100,learning_rate = learning_rate,
@@ -43,20 +41,18 @@ if args.train:
 
 
 else:
-    import pickle
-
     pred_dir = 'predictions/'
     ssg.ch_mkdir(pred_dir)
-    res_file = 'results/'
-    ssg.ch_mkdir(res_file)
 
-    weights = conv.get_filters()
-    with open(res_file+'_filters', 'w') as filehandler:
-        pickle.dump(weights, filehandler)
-#    np.save(res_file+'_filters',weights)
+#    import pickle
+#    res_file = 'results/'
+#    ssg.ch_mkdir(res_file)
+#    weights = conv.get_filters()
+#    with open(res_file+'_filters', 'w') as filehandler:
+#        pickle.dump(weights, filehandler)
 
-    files = ['test_set/m_'+str(i)+'.npy' for i in range(1)]
-    fx_files = ['test_set/f_'+str(i)+'.npy' for i in range(1)]
+    files = ['test_set/s_'+str(i)+'.npy' for i in range(11)]
+    fx_files = ['test_set/f_'+str(i)+'.npy' for i in range(11)]
     num = len(files)
     
     times = []
@@ -75,6 +71,7 @@ else:
         pred = conv.conv_large_image(x,pad=10,lx=w_size,ly=w_size)
         e = time()
         times.append(e-s)
+        np.save(pred_dir+fname)
 
         fig, (ax1,ax2,ax3) = plt.subplots(1,3,figsize=(24,8))
         ax1.imshow(x[0,:,:,0],aspect='auto')
