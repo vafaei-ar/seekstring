@@ -11,7 +11,7 @@ import shutil
 import healpy as hp
 from healpy import cartview
 from seekstring.utils import download,ch_mkdir
-import sky_to_patch
+from sky2face import sky_to_patch
 
 cmap = plt.cm.jet
 cmap.set_under('w')
