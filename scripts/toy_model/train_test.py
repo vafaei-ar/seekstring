@@ -71,7 +71,7 @@ else:
         pred = conv.conv_large_image(x,pad=10,lx=w_size,ly=w_size)
         e = time()
         times.append(e-s)
-        np.save(pred_dir+fname)
+        np.save(pred_dir+fname,pred)
 
         fig, (ax1,ax2,ax3) = plt.subplots(1,3,figsize=(24,8))
         ax1.imshow(x[0,:,:,0],aspect='auto')
