@@ -29,11 +29,6 @@ fwhm = args.fwhm
 fwhm_arcmin = args.fwhm
 fwhm = fwhm*np.pi/(180*60)
 
-#n_gaussian = 10
-#nside = 2048
-#lmax = 3500
-#fwhm = float(sys.argv[1])
-
 cl = np.loadtxt('../../data/cl_planck_lensed')
 ll = cl[:lmax,0]
 cl = cl[:lmax,1]
