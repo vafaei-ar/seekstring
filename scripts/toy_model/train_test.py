@@ -1,5 +1,5 @@
-#import matplotlib as mpl
-#mpl.use('agg')
+import matplotlib as mpl
+mpl.use('agg')
 
 import os
 import argparse
