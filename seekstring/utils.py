@@ -72,6 +72,7 @@ def download(getFile, saveFile=None):
     if saveFile is None:
         saveFile = getFile.split('/')[-1]
     sys.stdout.write('\rFetching ' + saveFile + '...\n')
+    urllib.urlretrieve(getFile, saveFile, reporthook=report)
     try:
         urllib.urlretrieve(getFile, saveFile, reporthook=report)
     except:
