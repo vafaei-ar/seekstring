@@ -2,6 +2,7 @@ import os
 import cv2
 import sys
 import urllib
+import requests
 import numpy as np
 from astropy.io import fits
 
@@ -52,6 +53,15 @@ def the_print(text,style='bold',tc='gray',bgc='red'):
     
     form = ';'.join([str(style), str(fg), str(bg)])
     print('\x1b[%sm %s \x1b[0m' % (form, text))
+
+def connected(url='http://www.google.com/'):
+    timeout=5
+    try:
+        _ = requests.get(url, timeout=timeout)
+        return True
+    except requests.ConnectionError:
+        print("Internet connection problem.")
+        return False
 
 def download(getFile, saveFile=None):
     assert connected(),'Error! check your Internet connection.'
