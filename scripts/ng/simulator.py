@@ -10,7 +10,7 @@ import gzip
 import shutil
 import healpy as hp
 from healpy import cartview
-from seekstring.utils import download
+from seekstring.utils import download,ch_mkdir
 import sky_to_patch
 
 cmap = plt.cm.jet
@@ -22,7 +22,6 @@ parser.add_argument('-r', action="store_true", default=False)
 parser.add_argument('--nside', action="store", type=int, default=2048)
 parser.add_argument('--lmax', action="store", type=int, default=3500)
 parser.add_argument('--fwhm', action="store", type=float, default=1.0)
-parser.add_argument('--nsim', action="store", type=int, default=3)
 args = parser.parse_args()
 replace = args.r
 nside = args.nside
@@ -30,14 +29,6 @@ lmax = args.lmax
 fwhm = args.fwhm
 fwhm_arcmin = args.fwhm
 fwhm = fwhm*np.pi/(180*60)
-n_gaussian = args.nsim
-
-if nside==2048:
-	n_string=3
-elif nside==4096:
-    n_string=1
-else:
-	assert 0,'Nside have to be either 2048 or 4096!'
 
 #n_gaussian = 10
 #nside = 2048
@@ -48,13 +39,12 @@ cl = np.loadtxt('../../data/cl_planck_lensed')
 ll = cl[:lmax,0]
 cl = cl[:lmax,1]
 
-if not os.path.exists('./'+wset+'_set/gaussian/'):
-	os.makedirs('./'+wset+'_set/gaussian/') 
+ch_mkdir('./'+wset+'_set/gaussian/') 
 
+n_gaussian = 11
+n_string=3
 
-
-
-wsets = ['training']*10+['test']
+wsets = ['training']*(n_gaussian-1)+['test']
 
 for i in range(n_gaussian):
     wset = wsets[i]
@@ -97,11 +87,9 @@ for i in range(n_gaussian):
         plt.savefig('./'+wset+'_set/gaussian/power_'+str(nside)+'_'+str(fwhm_arcmin)+'_'+str(i)+'.jpg')
         plt.close()
 
-if not os.path.exists('./'+wset+'_set/string/'):
-	os.makedirs('./'+wset+'_set/string/') 
+ch_mkdir('./'+wset+'_set/string/') 
 	
-
-wsets = ['training']*2+['test']
+wsets = ['training']*(n_string-1)+['test']
 
 for i in range(n_string): 
     wset = wsets[i]
