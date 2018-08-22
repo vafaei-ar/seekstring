@@ -9,7 +9,7 @@ import seekstring as ssg
 from time import time
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--time_limit', action="store", type=int, default=60)
+parser.add_argument('--time_limit', action="store", type=int, default=120)
 parser.add_argument('--learning_rate', action="store", type=float, default=0.01)
 parser.add_argument('--train', action="store_true", default=False)
 
@@ -32,7 +32,7 @@ conv = ssg.ConvolutionalLayers(nx=w_size,ny=w_size,n_channel=1,
                                arch_file_name='arch_0')
 
 if args.train:
-    for i in range(5):
+    for i in range(time_limit/30):
         print('Training stage: '+str(i))
         conv.train(data_provider=dp,training_epochs = 10000000,
                    n_s = 100,learning_rate = learning_rate,
