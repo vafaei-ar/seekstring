@@ -33,8 +33,6 @@ cl = np.loadtxt('../../data/cl_planck_lensed')
 ll = cl[:lmax,0]
 cl = cl[:lmax,1]
 
-ch_mkdir('./'+wset+'_set/gaussian/') 
-
 nside = 2048
 n_gaussian = 11
 n_string=3
@@ -43,6 +41,7 @@ wsets = ['training']*(n_gaussian-1)+['test']
 
 for i in range(n_gaussian):
     wset = wsets[i]
+    ch_mkdir('./'+wset+'_set/gaussian/') 
 
     if not os.path.exists('./'+wset+'_set/gaussian/'+'map_'+str(nside)+'_'+str(fwhm_arcmin)+'_'+str(i)+'.fits') or replace:
         print('Simulation gaussian map: '+str(i))
@@ -82,12 +81,12 @@ for i in range(n_gaussian):
         plt.savefig('./'+wset+'_set/gaussian/power_'+str(nside)+'_'+str(fwhm_arcmin)+'_'+str(i)+'.jpg')
         plt.close()
 
-ch_mkdir('./'+wset+'_set/string/') 
 	
 wsets = ['training']*(n_string-1)+['test']
 
 for i in range(n_string): 
     wset = wsets[i]
+    ch_mkdir('./'+wset+'_set/string/') 
 
     if not os.path.exists('./'+wset+'_set/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.fits.gz'):
         print('Downloading string: '+str(i))
