@@ -24,7 +24,6 @@ parser.add_argument('--lmax', action="store", type=int, default=3500)
 parser.add_argument('--fwhm', action="store", type=float, default=1.0)
 args = parser.parse_args()
 replace = args.r
-nside = args.nside
 lmax = args.lmax
 fwhm = args.fwhm
 fwhm_arcmin = args.fwhm
@@ -41,6 +40,7 @@ cl = cl[:lmax,1]
 
 ch_mkdir('./'+wset+'_set/gaussian/') 
 
+nside = 2048
 n_gaussian = 11
 n_string=3
 
