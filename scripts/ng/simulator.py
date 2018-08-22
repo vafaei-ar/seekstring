@@ -11,7 +11,7 @@ import shutil
 import healpy as hp
 from healpy import cartview
 from seekstring.utils import download,ch_mkdir
-from sky2face import sky_to_patch
+from ccgpack import sky2face
 
 cmap = plt.cm.jet
 cmap.set_under('w')
@@ -55,7 +55,7 @@ for i in range(n_gaussian):
         plt.savefig('./'+wset+'_set/gaussian/'+'map_'+str(nside)+'_'+str(fwhm_arcmin)+'_'+str(i)+'.jpg')
         plt.close()
 
-        patches = sky_to_patch(m, 1, 12, nside)
+        patches = sky2face(m)
         for j in range(12):
             np.save('./'+wset+'_set/gaussian/map_p'+str(nside)+'_'+str(fwhm_arcmin)+'_'+str(12*i+j),patches[j])
             plt.imshow(patches[j], cmap=cmap)
@@ -106,7 +106,7 @@ for i in range(n_string):
         hp.mollview(ss, nest=1, cmap=cmap)	
         plt.savefig('./'+wset+'_set/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'.jpg')
         plt.close()
-        patches = sky_to_patch(ss, 1, 12, nside)
+        patches = sky2face(ss)
         for j in range(12):
             np.save('./'+wset+'_set/string/map1n_allz_rtaapixlw_'+str(nside)+'_p'+str(12*i+j),patches[j])
             plt.imshow(patches[j], cmap=cmap)
@@ -119,7 +119,7 @@ for i in range(n_string):
         print('Beaming string: '+str(i))
         ss = hp.sphtfunc.smoothing(ss,fwhm=fwhm)
         hp.write_map('./'+wset+'_set/string/map1n_allz_rtaapixlw_'+str(nside)+'_'+str(i+1)+'_'+str(fwhm_arcmin)+'.fits', ss, overwrite=1)
-        patches = sky_to_patch(ss, 1, 12, nside)
+        patches = sky2face(ss)
         for j in range(12):
             np.save('./'+wset+'_set/string/map1n_allz_rtaapixlw_'+str(nside)+'_p'+str(12*i+j)+'_'+str(fwhm_arcmin),patches[j])
             plt.imshow(patches[j], cmap=cmap)
