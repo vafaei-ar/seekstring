@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import os
 import sys
+import shutil
 import numpy as np
 import tensorflow as tf
 from .utils import ch_mkdir,the_print
@@ -77,34 +78,23 @@ class ConvolutionalLayers(object):
         if arch_file_name is not None:
             if arch_file_name[-3:]=='.py':
                 arch_file_name = arch_file_name[-3:]
-            exec('import '+arch_file_name+' as arch')
+            exec('from '+arch_file_name+' import architecture', globals())
+            self.outputs = architecture(self.x_in, self.drop_out)
             try:
                 os.remove(arch_file_name+'.pyc')
             except:
                 pass
-            self.outputs = arch.architecture(self.x_in, self.drop_out)
+            try:
+                shutil.rmtree('__pycache__')
+            except:
+                pass
+
             if type(self.outputs) is list:
                 self.x_out = self.outputs[0]
             else:
                 self.x_out = self.outputs
         else:
-
-            xp = tf.layers.conv2d(self.x_in,filters=16,kernel_size=5,strides=(1, 1),padding='same',
-                    activation=tf.nn.relu)
-            x = tf.layers.conv2d(xp,filters=16,kernel_size=5,strides=(1, 1),padding='same',
-                    activation=tf.nn.relu)
-            x = tf.layers.conv2d(x,filters=16,kernel_size=5,strides=(1, 1),padding='same',
-                    activation=tf.nn.relu)
-
-            x = x+xp
-            x = tf.layers.batch_normalization(x)
-
-            x = tf.layers.conv2d(x,filters=16,kernel_size=5,strides=(1, 1),padding='same',
-                    activation=tf.nn.relu)
-
-            x = tf.layers.dropout(x, self.drop_out)
-            self.x_out = tf.layers.conv2d(x,filters=1,kernel_size=5,strides=(1, 1),padding='same',
-                    activation=tf.nn.relu)
+            self.outputs = self.architecture()
 
         self.cost = tf.reduce_sum(tf.pow(self.y_true - self.x_out, 2))
 #        self.cost = tf.losses.log_loss(self.y_true,self.x_out)
@@ -121,6 +111,25 @@ class ConvolutionalLayers(object):
             init = tf.global_variables_initializer()
             self.sess.run(init)
                 
+    def architecture(self):
+        xp = tf.layers.conv2d(self.x_in,filters=16,kernel_size=5,strides=(1, 1),padding='same',
+                activation=tf.nn.relu)
+        x = tf.layers.conv2d(xp,filters=16,kernel_size=5,strides=(1, 1),padding='same',
+                activation=tf.nn.relu)
+        x = tf.layers.conv2d(x,filters=16,kernel_size=5,strides=(1, 1),padding='same',
+                activation=tf.nn.relu)
+
+        x = x+xp
+        x = tf.layers.batch_normalization(x)
+
+        x = tf.layers.conv2d(x,filters=16,kernel_size=5,strides=(1, 1),padding='same',
+                activation=tf.nn.relu)
+
+        x = tf.layers.dropout(x, self.drop_out)
+        self.x_out = tf.layers.conv2d(x,filters=1,kernel_size=5,strides=(1, 1),padding='same',
+                activation=tf.nn.relu)
+        return self.x_out
+
     def restore(self):
         tf.reset_default_graph()
         self.saver.restore(self.sess, self.model_add+'/model')

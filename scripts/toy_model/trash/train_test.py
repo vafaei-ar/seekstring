@@ -1,46 +1,71 @@
-import matplotlib as mpl
-mpl.use('agg')
+#import matplotlib as mpl
+#mpl.use('agg')
 
 import os
+import glob
 import argparse
 import numpy as np
 import pylab as plt
 import seekstring as ssg
 from time import time
 
+import tensorflow as tf
+
 parser = argparse.ArgumentParser()
-parser.add_argument('--time_limit', action="store", type=int, default=120)
+parser.add_argument('--time_limit', action="store", type=int, default=10)
 parser.add_argument('--learning_rate', action="store", type=float, default=0.01)
 parser.add_argument('--train', action="store_true", default=False)
+parser.add_argument('--s2g', action="store", type=float, default=0.7)
 
 args = parser.parse_args()
 time_limit = args.time_limit
 learning_rate = args.learning_rate
+s2g = args.s2g
 
-w_size = 128
+w_size = 64
 model_add = 'model'
 
-files = ['training_set/s_'+str(i)+'.npy' for i in range(51)]
-fx_files = ['training_set/f_'+str(i)+'.npy' for i in range(51)]
 
-dp = ssg.Data_Provider2(files=files,fx_files=fx_files,
-                        wx=w_size,wy=w_size)
+class cnn(ssg.ConvolutionalLayers):
+    def __init__(self,nx=276,ny=400,n_channel=1,
+                restore=False,model_add='./model',
+                arch_file_name=None):
+        super(cnn, self).__init__(nx=nx,ny=ny,n_channel=n_channel,
+                    restore=restore,model_add=model_add,
+                    arch_file_name=arch_file_name)
+        self.cost = tf.reduce_sum(tf.pow(self.y_true - self.x_out, 2))
 
-conv = ssg.ConvolutionalLayers(nx=w_size,ny=w_size,n_channel=1,
+conv = cnn(nx=w_size,ny=w_size,n_channel=1,
                                restore=os.path.exists(model_add),
                                model_add=model_add,
                                arch_file_name='arch_0')
 
 if args.train:
-    for i in range(time_limit/30):
-        print('Training stage: '+str(i))
-        conv.train(data_provider=dp,training_epochs = 10000000,
-                   n_s = 100,learning_rate = learning_rate,
-                   dropout=0.7, time_limit=time_limit, verbose=1)
-        learning_rate = learning_rate/5.
+    mode = 'training'
+    nfiles = len(glob.glob(mode+'_set/s_*.npy'))
+    s_files = [mode+'_set/s_'+str(i)+'.npy' for i in range(nfiles)]
+    g_files = [mode+'_set/g_'+str(i)+'.npy' for i in range(nfiles)]
+    fx_files = [mode+'_set/f_'+str(i)+'.npy' for i in range(nfiles)]
+
+    dps = ssg.Data_Provider2(files=s_files,fx_files=fx_files,
+                            wx=w_size,wy=w_size)
+    dpg = ssg.Data_Provider2(files=g_files,wx=w_size,wy=w_size)
+
+    def dp(n):
+        s,fx = dps(n)
+        g = dpg(n)
+        rc = np.random.uniform(1,10,n)
+        rc = rc[:,None,None,None]
+        return rc*((1-s2g)*g+s),rc*fx
+
+    print('Training stage')
+    conv.train(data_provider=dp,training_epochs = 10000000,
+               n_s = 150,learning_rate = learning_rate,
+               dropout=0.7, time_limit=time_limit, verbose=1)
 
 
 else:
+    mode = 'test'
     pred_dir = 'predictions/'
     ssg.ch_mkdir(pred_dir)
 
@@ -51,18 +76,22 @@ else:
 #    with open(res_file+'_filters', 'w') as filehandler:
 #        pickle.dump(weights, filehandler)
 
-    files = ['test_set/s_'+str(i)+'.npy' for i in range(11)]
-    fx_files = ['test_set/f_'+str(i)+'.npy' for i in range(11)]
-    num = len(files)
+    nfiles = len(glob.glob(mode+'_set/s_*.npy'))
+    s_files = [mode+'_set/s_'+str(i)+'.npy' for i in range(nfiles)]
+    g_files = [mode+'_set/g_'+str(i)+'.npy' for i in range(nfiles)]
+    fx_files = [mode+'_set/f_'+str(i)+'.npy' for i in range(nfiles)]
     
     times = []
 
-    for i in range(num):
-        fil = files[i]
+    for i in range(nfiles):
+        sfil = s_files[i]
+        gfil = g_files[i]
         xfil = fx_files[i]
 
-        fname = fil.split('/')[-1]
-        x = np.load(fil)
+        fname = sfil.split('/')[-1]
+        s = np.load(sfil)
+        g = np.load(gfil)
+        x = (1-s2g)*g+s
         x = np.expand_dims(x,axis=0)
         x = np.expand_dims(x,axis=-1)
         y = np.load(xfil)
@@ -74,14 +103,18 @@ else:
         np.save(pred_dir+fname,pred)
 
         fig, (ax1,ax2,ax3) = plt.subplots(1,3,figsize=(24,8))
-        ax1.imshow(x[0,:,:,0],aspect='auto')
-        ax2.imshow(y,aspect='auto')
-        ax3.imshow(pred,aspect='auto')
+        ax1.imshow(x[0,10:-10,10:-10,0],aspect='auto')
+        ax1.axis("off")
+        ax2.imshow(y[10:-10,10:-10],aspect='auto')
+        ax2.axis("off")
+        ax3.imshow(pred[10:-10,10:-10],aspect='auto')
+        ax3.axis("off")
+        print (pred[10:-10,10:-10].mean())
 
         plt.subplots_adjust(left=0.04, right=0.99, top=0.99, bottom=0.04)
         plt.savefig(pred_dir+fname+'.jpg',dpi=30)
         plt.close()  
-    print np.mean(times)     
+    print(np.mean(times))  
 
 #print('FX is initiating ...')
 #ch_mkdir('./data/features')

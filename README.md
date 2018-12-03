@@ -1,4 +1,4 @@
-SeekString
+Deep Data Digger Net. (D3Net)
 =======
 
 _Python library for _

@@ -26,7 +26,7 @@ PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 setup(
 	name='seekstring',
 	version='0.1.0',
-	description='Generative adveserial network for cosmic string simulation.',
+	description='Deep Data Digger Net. (DthreeNet) allows you to dig deeper to extract data!',
 	author='Alireza',
 	url='https://github.com/vafaeiar/seekstring',
 	packages=find_packages(PACKAGE_PATH, "seekstring"),
@@ -47,7 +47,6 @@ setup(
 		  'Programming Language :: Python :: 2.7',
 		  'Programming Language :: Python :: 3',
 		  'Programming Language :: Python :: 3.3',
-		  'Programming Language :: Fortran',
 	]
 )
 

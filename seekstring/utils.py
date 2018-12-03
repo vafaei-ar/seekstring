@@ -83,3 +83,7 @@ def download(getFile, saveFile=None):
         urllib.request.urlretrieve(getFile, saveFile, reporthook=report)
     sys.stdout.write("\rDownload complete, saved as %s" % (saveFile) + '\n\n')
     sys.stdout.flush()
+
+def pop_percent(i,ntot):
+    sys.stdout.write("\r{:3.1f}%".format(100.*(i+1)/ntot)+ ' complete')
+    sys.stdout.flush()
