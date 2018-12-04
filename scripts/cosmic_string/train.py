@@ -110,7 +110,7 @@ nside = 4096
 nx=100
 ny=100
 alpha = 4
-x_files = glob('./data/gaussian/map_p4096_1.0_*.npy')
+x_files = glob('./data/gaussian/map_p4096_0.0_*.npy')
 y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
 dp = DataProvider(x_files,y_files,alpha,
                   nx=nx,ny=ny,
