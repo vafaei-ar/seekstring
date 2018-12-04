@@ -164,7 +164,7 @@ success = []
 dalpha = 0.05
 pv_lim = 1e-10
 training_epochs = 100
-iterations=10
+iterations=100
 n_s = 10
 
 if os.path.exists('./results/info.npy'):
