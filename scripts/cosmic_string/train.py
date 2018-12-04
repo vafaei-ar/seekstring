@@ -148,7 +148,7 @@ def check(name,model,dp):
     ax1.set_title(r'$G+\alpha S$')
     ax2.imshow(y[0,:,:,0])
     ax2.set_title(r'$S$')
-    ax3.imshow(x_pred[:,:,0])
+    ax3.imshow(x_pred[0,:,:,0])
     ax3.set_title(r'$N(G+\alpha S)$')
     plt.savefig(name+'_sample'+'.jpg')
     plt.close()

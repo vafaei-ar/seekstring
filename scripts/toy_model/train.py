@@ -146,7 +146,7 @@ def check(name,model,dp):
     ax1.set_title('Input')
     ax2.imshow(y[0,:,:,0])
     ax2.set_title('Output')
-    ax3.imshow(x_pred[:,:,0])
+    ax3.imshow(x_pred[0,:,:,0])
     ax3.set_title('Prediction')
     plt.savefig(name+'_sample'+'.jpg')
     plt.close()
