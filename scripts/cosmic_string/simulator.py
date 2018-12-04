@@ -56,7 +56,7 @@ parser.add_argument('-r', action="store_true", default=False)
 parser.add_argument('--nside', action="store", type=int, default=2048)
 parser.add_argument('--lmax', action="store", type=int, default=0)
 parser.add_argument('--fwhm', action="store", type=float, default=0.0)
-parser.add_argument('--nsim', action="store", type=int, default=5)
+parser.add_argument('--nsim', action="store", type=int, default=10)
 args = parser.parse_args()
 replace = args.r
 nside = args.nside
@@ -135,16 +135,10 @@ if nside==2048:
 elif nside==4096:
     n_string=1
     ex = 'xz'
-    
-    try:
-        import lzma
-    except ImportError:
-        from backports import lzma
         
     def extract(in_file,out_file):
-        with lzma.open(in_file) as f_in:
-            with open(out_file, 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)   
+        os.system('unxz '+in_file)   
+#    unxz file.xz
 else:
     assert 0,'Nside have to be either 2048 or 4096!'
 

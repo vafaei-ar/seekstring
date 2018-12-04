@@ -114,7 +114,7 @@ x_files = glob('./data/gaussian/map_p4096_1.0_*.npy')
 y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
 dp = DataProvider(x_files,y_files,alpha,
                   nx=nx,ny=ny,
-                  n_buffer=2,reload_rate=5000)
+                  n_buffer=2,reload_rate=10000)
 
 #fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
 #ax1.imshow(x[0,:,:,0])
@@ -155,8 +155,7 @@ def check(name,model,dp):
     print('p-value:',ttest_ind(l0,l1)[1])
     return ttest_ind(l0,l1)[1]
 
-model = ng.Model(nx=nx,ny=ny,n_channel=1,n_class=1,
-         restore=0,model_add='./model/'+str(0),arch=arch)
+model = ng.Model(dp,restore=0,model_add='./model/'+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
 
@@ -165,8 +164,8 @@ success = []
 dalpha = 0.05
 pv_lim = 1e-10
 training_epochs = 10
-iterations=10
-n_s = 10
+iterations=100
+n_s = 50
 
 if os.path.exists('./results/info.npy'):
     i,dp.alpha,dalpha = np.load('./results/info.npy')
