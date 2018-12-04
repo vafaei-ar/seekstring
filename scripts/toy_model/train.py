@@ -109,8 +109,8 @@ class DataProvider(object):
 nx=100
 ny=100
 alpha = 4
-x_files = glob('./data/gaussian/g_2048_*')
-y_files = glob('./data/string/s_2048_*')
+x_files = glob('./data/gaussian/g_2048_*.npy')
+y_files = glob('./data/string/s_2048_*.npy')
 dp = DataProvider(x_files,y_files,alpha,
                   nx=nx,ny=ny,n_buffer=len(x_files))
 
@@ -130,8 +130,8 @@ def check(name,model,dp):
     for i in range(100):
         x,y = dp(1)
         x0,y = dp(1,0)
-        l0.append(model.conv(x0).std())
-        l1.append(model.conv(x).std())
+        l0.append(model.predict(x0).std())
+        l1.append(model.predict(x).std())
     b0,h0 = ccg.pdf(l0,20)
     b1,h1 = ccg.pdf(l1,20)
     plt.plot(b0,h0)
@@ -141,7 +141,7 @@ def check(name,model,dp):
     
     fig,(ax1,ax2,ax3) = plt.subplots(ncols=3,nrows=1,figsize=(15,7))
     x,y = dp(1)
-    x_pred = model.conv(x)
+    x_pred = model.predict(x)
     ax1.imshow(x[0,:,:,0])
     ax1.set_title('Input')
     ax2.imshow(y[0,:,:,0])

@@ -132,8 +132,8 @@ def check(name,model,dp):
     for i in range(100):
         x,y = dp(1)
         x0,y = dp(1,0)
-        l0.append(model.conv(x0).std())
-        l1.append(model.conv(x).std())
+        l0.append(model.predict(x0).std())
+        l1.append(model.predict(x).std())
     b0,h0 = ccg.pdf(l0,20)
     b1,h1 = ccg.pdf(l1,20)
     plt.plot(b0,h0)
@@ -143,7 +143,7 @@ def check(name,model,dp):
     
     fig,(ax1,ax2,ax3) = plt.subplots(ncols=3,nrows=1,figsize=(15,7))
     x,y = dp(1)
-    x_pred = model.conv(x)
+    x_pred = model.predict(x)
     ax1.imshow(x[0,:,:,0])
     ax1.set_title(r'$G+\alpha S$')
     ax2.imshow(y[0,:,:,0])
