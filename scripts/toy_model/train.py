@@ -153,8 +153,7 @@ def check(name,model,dp):
     print('p-value:',ttest_ind(l0,l1)[1])
     return ttest_ind(l0,l1)[1]
 
-model = ng.Model(nx=nx,ny=ny,n_channel=1,n_class=1,
-         restore=0,model_add='./model/'+str(0),arch=arch)
+model = ng.Model(dp,restore=0,model_add='./model/'+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
 
