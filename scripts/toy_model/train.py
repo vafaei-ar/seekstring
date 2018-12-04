@@ -106,7 +106,6 @@ class DataProvider(object):
     
         return X,Y       
 
-nside = 512
 nx=100
 ny=100
 alpha = 4
