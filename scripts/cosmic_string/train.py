@@ -2,6 +2,7 @@ import matplotlib as mpl
 mpl.use('agg')
 
 import os
+import sys
 import numpy as np
 import pylab as plt
 import ngene as ng
@@ -176,7 +177,9 @@ if os.path.exists('./results/info.npy'):
 else:
     i = 0
 
-for _ in range(20):
+ntry = int(sys.argv[1])
+
+for _ in range(ntry):
     
     alphas.append(dp.alpha)
     model.model_add='./model/'+str(i)
