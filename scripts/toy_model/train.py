@@ -109,8 +109,8 @@ class DataProvider(object):
 nx=100
 ny=100
 alpha = 4
-x_files = glob('./data/gaussian/g_512_*')
-y_files = glob('./data/string/s_512_*')
+x_files = glob('./data/gaussian/g_2048_*')
+y_files = glob('./data/string/s_2048_*')
 dp = DataProvider(x_files,y_files,alpha,
                   nx=nx,ny=ny,n_buffer=len(x_files))
 
