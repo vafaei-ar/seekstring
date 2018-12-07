@@ -14,6 +14,32 @@ from scipy.stats import ttest_ind
 from random import choice,shuffle
 from ngene.architectures.simple import architecture
 
+nside = 4096
+nx=100
+ny=100
+alpha = 4
+x_files = glob('./data/gaussian/map_p4096_0.0_*.npy')
+y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
+dp = DataProvider(x_files,y_files,alpha,
+                  nx=nx,ny=ny,
+                  n_buffer=2,reload_rate=10000)
+
+alphas = []
+success = []
+dalpha = 0.05
+pv_lim = 1e-10
+training_epochs = 100
+iterations=100
+n_s = 50
+
+ntry = int(sys.argv[1])
+n_layers = int(sys.argv[2])
+#fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
+#ax1.imshow(x[0,:,:,0])
+#ax1.axis('off')
+#ax2.imshow(y[0,:,:,0])
+#ax2.axis('off')
+
 def standard(x):
     x = x-x.mean()
     x = x/x.std()
@@ -101,30 +127,15 @@ class DataProvider(object):
             x,y = self.get_data()
             x,y = self.pre_process(x,y,alpha)
             X.append(x)
+            y = ccg.filters(y,edd_method='sch')
             Y.append(y)
             
         X,Y = np.array(X),np.array(Y)
     
         return X,Y       
 
-nside = 4096
-nx=100
-ny=100
-alpha = 4
-x_files = glob('./data/gaussian/map_p4096_0.0_*.npy')
-y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
-dp = DataProvider(x_files,y_files,alpha,
-                  nx=nx,ny=ny,
-                  n_buffer=2,reload_rate=10000)
-
-#fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
-#ax1.imshow(x[0,:,:,0])
-#ax1.axis('off')
-#ax2.imshow(y[0,:,:,0])
-#ax2.axis('off')
-
 def arch(x_in):
-    x_out = architecture(x_in=x_in,n_layers=5,res=2)
+    x_out = architecture(x_in=x_in,n_layers=n_layers,res=2)
     return x_out
 
 def check(name,model,dp):
@@ -160,14 +171,6 @@ model = ng.Model(dp,restore=0,model_add='./model/'+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
 
-alphas = []
-success = []
-dalpha = 0.05
-pv_lim = 1e-10
-training_epochs = 10
-iterations=100
-n_s = 50
-
 if os.path.exists('./results/info.npy'):
     i,dp.alpha,dalpha = np.load('./results/info.npy')
     i = int(i)
@@ -176,8 +179,6 @@ if os.path.exists('./results/info.npy'):
     model.restore()
 else:
     i = 0
-
-ntry = int(sys.argv[1])
 
 for _ in range(ntry):
     

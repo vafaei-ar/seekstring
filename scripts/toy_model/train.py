@@ -14,6 +14,30 @@ from scipy.stats import ttest_ind
 from random import choice,shuffle
 from ngene.architectures.simple import architecture
 
+nx=100
+ny=100
+alpha = 4
+x_files = glob('./data/gaussian/g_2048_*.npy')
+y_files = glob('./data/string/s_2048_*.npy')
+dp = DataProvider(x_files,y_files,alpha,
+                  nx=nx,ny=ny,n_buffer=len(x_files))
+                  
+alphas = []
+success = []
+dalpha = 0.05
+pv_lim = 1e-10
+training_epochs = 100
+iterations=100
+n_s = 50
+
+ntry = int(sys.argv[1])
+n_layers = int(sys.argv[2])
+#fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
+#ax1.imshow(x[0,:,:,0])
+#ax1.axis('off')
+#ax2.imshow(y[0,:,:,0])
+#ax2.axis('off')
+
 def standard(x):
     x = x-x.mean()
     x = x/x.std()
@@ -100,6 +124,7 @@ class DataProvider(object):
         for i in range(n):                
             x,y = self.get_data()
             x,y = self.pre_process(x,y,alpha)
+            y = ccg.filters(y,edd_method='sch')
             X.append(x)
             Y.append(y)
             
@@ -107,22 +132,8 @@ class DataProvider(object):
     
         return X,Y       
 
-nx=100
-ny=100
-alpha = 4
-x_files = glob('./data/gaussian/g_2048_*.npy')
-y_files = glob('./data/string/s_2048_*.npy')
-dp = DataProvider(x_files,y_files,alpha,
-                  nx=nx,ny=ny,n_buffer=len(x_files))
-
-#fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
-#ax1.imshow(x[0,:,:,0])
-#ax1.axis('off')
-#ax2.imshow(y[0,:,:,0])
-#ax2.axis('off')
-
 def arch(x_in):
-    x_out = architecture(x_in=x_in,n_layers=5,res=2)
+    x_out = architecture(x_in=x_in,n_layers=n_layers,res=2)
     return x_out
 
 def check(name,model,dp):
@@ -158,14 +169,6 @@ model = ng.Model(dp,restore=0,model_add='./model/'+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
 
-alphas = []
-success = []
-dalpha = 0.05
-pv_lim = 1e-10
-training_epochs = 100
-iterations=100
-n_s = 10
-
 if os.path.exists('./results/info.npy'):
     i,dp.alpha,dalpha = np.load('./results/info.npy')
     i = int(i)
@@ -174,8 +177,6 @@ if os.path.exists('./results/info.npy'):
     model.restore()
 else:
     i = 0
-
-ntry = int(sys.argv[1])
 
 for _ in range(ntry):
     
