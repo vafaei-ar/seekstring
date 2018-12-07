@@ -20,8 +20,7 @@ ny=100
 alpha = 4
 x_files = glob('./data/gaussian/map_p4096_0.0_*.npy')
 y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
-dp = DataProvider(x_files,y_files,alpha,
-                  nx=nx,ny=ny,
+dp = DataProvider(x_files,y_files,alpha,nx=nx,ny=ny,
                   n_buffer=2,reload_rate=10000)
 
 alphas = []
@@ -31,6 +30,7 @@ pv_lim = 1e-10
 training_epochs = 100
 iterations=100
 n_s = 50
+learning_rate = 0.05
 
 ntry = int(sys.argv[1])
 n_layers = int(sys.argv[2])
@@ -167,14 +167,16 @@ def check(name,model,dp):
     print('p-value:',ttest_ind(l0,l1)[1])
     return ttest_ind(l0,l1)[1]
 
-model = ng.Model(dp,restore=0,model_add='./model/'+str(0),arch=arch)
+model_add = './models/'+str(n_layers)+'_layers/'
+res_dir = './results/'+str(n_layers)+'_layers/
+model = ng.Model(dp,restore=0,model_add=model_add+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
 
-if os.path.exists('./results/info.npy'):
-    i,dp.alpha,dalpha = np.load('./results/info.npy')
+if os.path.exists(res_dir+'info.npy'):
+    i,dp.alpha,dalpha,learning_rate = np.load(res_dir+'info.npy')
     i = int(i)
-    model.model_add='./model/'+str(i)
+    model.model_add=model_add+str(i)
     print('Loading model '+str(i)+' ...')
     model.restore()
 else:
@@ -183,25 +185,28 @@ else:
 for _ in range(ntry):
     
     alphas.append(dp.alpha)
-    model.model_add='./model/'+str(i)
+    model.model_add=model_add+str(i)
     print('Training model:{}, alpha:{}'.format(model.model_add,dp.alpha))
     model.train(data_provider=dp,training_epochs=training_epochs,
                         iterations=iterations,n_s=n_s,
-                        learning_rate=0.01, time_limit=None,
+                        learning_rate=learning_rate, time_limit=None,
                         metric=None, verbose=1,death_preliminary_check=30,
                         death_frequency_check=1000)
+    learning_rate = learning_rate/1.02
     
-    np.save('./results/info',[i,dp.alpha,dalpha])
-    pv = check('./results/plots/'+str(i),model,dp)
+    np.save(res_dir+'info',[i,dp.alpha,dalpha,learning_rate])
+    pv = check(res_dir+'plots/'+str(i),model,dp)
     if pv>pv_lim and i!=0:
         dp.alpha = dp.alpha+dalpha
         if np.random.uniform()>0.5:
-            dalpha = dalpha/2  
-        model.model_add='./model/'+str(i-1)
+            dalpha = dalpha/1.5
+        model.model_add=model_add+str(i-1)
         model.restore()
     else:
         while dp.alpha<=dalpha:
-            dalpha = dalpha/2
+            dalpha = dalpha/1.5
         dp.alpha = dp.alpha-dalpha
+        if np.random.uniform()>0.7:
+            dalpha = dalpha*1.5
         i += 1  
     success.append(pv<pv_lim)        
