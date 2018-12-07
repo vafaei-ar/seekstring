@@ -168,7 +168,7 @@ def check(name,model,dp):
     return ttest_ind(l0,l1)[1]
 
 model_add = './models/'+str(n_layers)+'_layers/'
-res_dir = './results/'+str(n_layers)+'_layers/
+res_dir = './results/'+str(n_layers)+'_layers/'
 model = ng.Model(dp,restore=0,model_add=model_add+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
