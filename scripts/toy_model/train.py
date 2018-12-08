@@ -41,9 +41,6 @@ def standard(x):
     x = x/x.std()
     return x
 
-if not os.path.exists('./results/plots'):
-	os.makedirs('./results/plots') 
-
 def get_slice(data,nx,ny):
     """Slice matrix in x and y direction"""
     lx,ly = data.shape  
