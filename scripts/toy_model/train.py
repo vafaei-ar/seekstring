@@ -58,13 +58,13 @@ def get_slice(data,nx,ny):
     return slx, sly
 
 class DataProvider(object):
-    def __init__(self,x_files,y_files,alpha,
+    def __init__(self,n_files,s_files,alpha,
                  nx=0,ny=0,n_buffer=10,reload_rate=10,filt=False):
         
 #        self.l1 = l1
 #        self.l2 = l2     
-        self.n_files = x_files
-        self.s_files = y_files
+        self.n_files = n_files
+        self.s_files = s_files
         
         nmin = min(len(n_files),len(s_files))
         if n_buffer>= nmin:
@@ -175,8 +175,8 @@ def check(name,model,dp):
     print('p-value:',ttest_ind(l0,l1)[1])
     return ttest_ind(l0,l1)[1]
 
-x_files = glob('./data/gaussian/g_2048_*.npy')
-y_files = glob('./data/string/s_2048_*.npy')
+n_files = glob('./data/gaussian/g_2048_*.npy')
+s_files = glob('./data/string/s_2048_*.npy')
 dp = DataProvider(n_files,s_files,alpha,
                   nx=nx,ny=ny,n_buffer=len(x_files))
                   
