@@ -30,6 +30,7 @@ learning_rate = 0.05
 
 ntry = int(sys.argv[1])
 n_layers = int(sys.argv[2])
+filt = int(sys.argv[3])
 #fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
 #ax1.imshow(x[0,:,:,0])
 #ax1.axis('off')
@@ -118,7 +119,8 @@ class DataProvider(object):
         Y = []
         for i in range(n):                
             x,y = self.get_data()
-            y = ccg.filters(y,edd_method='sch')
+            if filt=='ON':
+                y = ccg.filters(y,edd_method='sch')
             x,y = self.pre_process(x,y,alpha)
             X.append(x)
             Y.append(y)
@@ -165,8 +167,8 @@ y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
 dp = DataProvider(x_files,y_files,alpha,nx=nx,ny=ny,
                   n_buffer=2,reload_rate=10000)
 
-model_add = './models/'+str(n_layers)+'_layers/'
-res_dir = './results/'+str(n_layers)+'_layers/'
+model_add = './models/'+str(n_layers)+'_layers_f'+filt+'/'
+res_dir = './results/'+str(n_layers)+'_layers_f'+filt+'/'
 ccg.ch_mkdir(res_dir)
 model = ng.Model(dp,restore=0,model_add=model_add+str(0),arch=arch)
 
