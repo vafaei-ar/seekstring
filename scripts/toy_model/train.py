@@ -18,10 +18,6 @@ from ngene.architectures.simple import architecture
 nx=100
 ny=100
 alpha = 4
-x_files = glob('./data/gaussian/g_2048_*.npy')
-y_files = glob('./data/string/s_2048_*.npy')
-dp = DataProvider(x_files,y_files,alpha,
-                  nx=nx,ny=ny,n_buffer=len(x_files))
                   
 alphas = []
 success = []
@@ -167,6 +163,11 @@ def check(name,model,dp):
     print('p-value:',ttest_ind(l0,l1)[1])
     return ttest_ind(l0,l1)[1]
 
+x_files = glob('./data/gaussian/g_2048_*.npy')
+y_files = glob('./data/string/s_2048_*.npy')
+dp = DataProvider(x_files,y_files,alpha,
+                  nx=nx,ny=ny,n_buffer=len(x_files))
+                  
 model_add = './models/'+str(n_layers)+'_layers/'
 res_dir = './results/'+str(n_layers)+'_layers/'
 model = ng.Model(dp,restore=0,model_add=model_add+str(0),arch=arch)
