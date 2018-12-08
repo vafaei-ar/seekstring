@@ -92,7 +92,10 @@ class DataProvider(object):
             filex = self.x_files[xinds[i]]
             filey = self.y_files[yinds[i]]
             self.x_set.append(standard(np.load(filex)))
-            self.y_set.append(standard(np.load(filey)))
+            yy = standard(np.load(filey))
+            if filt=='ON':
+                yy = ccg.filters(yy,edd_method='sch')
+            self.y_set.append(yy)
 
     def get_data(self): 
         self.counter += 1
@@ -119,8 +122,6 @@ class DataProvider(object):
         Y = []
         for i in range(n):                
             x,y = self.get_data()
-            if filt=='ON':
-                y = ccg.filters(y,edd_method='sch')
             x,y = self.pre_process(x,y,alpha)
             X.append(x)
             Y.append(y)
@@ -156,8 +157,9 @@ def check(name,model,dp):
     ax2.imshow(y[0,:,:,0])
     ax2.set_title(r'$S$')
     ax3.imshow(x_pred[0,:,:,0])
-    ax3.set_title(r'$N(G+\alpha S)$')
-    plt.savefig(name+'_sample'+'.jpg')
+    ax3.set_title(r'$N+G+'+str(dp.alpha)+r'S$')
+    plt.subplots_adjust(left=0.06, bottom=0.02, right=0.99, top=0.95)
+    plt.savefig(name+'_sample'+'.jpg',dpi=100)
     plt.close()
     print('p-value:',ttest_ind(l0,l1)[1])
     return ttest_ind(l0,l1)[1]
