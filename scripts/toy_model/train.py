@@ -178,7 +178,7 @@ def check(name,model,dp):
 n_files = glob('./data/gaussian/g_2048_*.npy')
 s_files = glob('./data/string/s_2048_*.npy')
 dp = DataProvider(n_files,s_files,alpha,
-                  nx=nx,ny=ny,n_buffer=len(x_files))
+                  nx=nx,ny=ny,n_buffer=len(n_files))
                   
 model_add = './models/'+str(n_layers)+'_layers_f'+filt+'/'
 res_dir = './results/'+str(n_layers)+'_layers_f'+filt+'/'
