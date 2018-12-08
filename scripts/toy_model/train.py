@@ -23,8 +23,8 @@ alphas = []
 success = []
 dalpha = 0.05
 pv_lim = 1e-10
-training_epochs = 100
-iterations=100
+training_epochs = 10
+iterations=10
 n_s = 50
 learning_rate = 0.05
 
