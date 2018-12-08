@@ -121,8 +121,8 @@ class DataProvider(object):
         Y = []
         for i in range(n):                
             x,y = self.get_data()
-            x,y = self.pre_process(x,y,alpha)
             y = ccg.filters(y,edd_method='sch')
+            x,y = self.pre_process(x,y,alpha)
             X.append(x)
             Y.append(y)
             
