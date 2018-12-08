@@ -41,9 +41,6 @@ def standard(x):
     x = x/x.std()
     return x
 
-if not os.path.exists('./results/plots'):
-	os.makedirs('./results/plots') 
-
 def get_slice(data,nx,ny):
     """Slice matrix in x and y direction"""
     lx,ly = data.shape  
@@ -170,6 +167,7 @@ dp = DataProvider(x_files,y_files,alpha,nx=nx,ny=ny,
 
 model_add = './models/'+str(n_layers)+'_layers/'
 res_dir = './results/'+str(n_layers)+'_layers/'
+ccg.ch_mkdir(res_dir)
 model = ng.Model(dp,restore=0,model_add=model_add+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
