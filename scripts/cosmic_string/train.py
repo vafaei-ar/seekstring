@@ -169,7 +169,7 @@ dp = DataProvider(x_files,y_files,alpha,nx=nx,ny=ny,
 
 model_add = './models/'+str(n_layers)+'_layers_f'+filt+'/'
 res_dir = './results/'+str(n_layers)+'_layers_f'+filt+'/'
-ccg.ch_mkdir(res_dir)
+ccg.ch_mkdir(res_dir+'plots')
 model = ng.Model(dp,restore=0,model_add=model_add+str(0),arch=arch)
 
 print('# of variables:',model.n_variables)
