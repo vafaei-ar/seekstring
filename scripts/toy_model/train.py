@@ -30,7 +30,7 @@ learning_rate = 0.05
 
 ntry = int(sys.argv[1])
 n_layers = int(sys.argv[2])
-filt = int(sys.argv[3])
+filt = sys.argv[3]
 #fig, (ax1,ax2)= plt.subplots(ncols=2, nrows=1, figsize=(20, 10))
 #ax1.imshow(x[0,:,:,0])
 #ax1.axis('off')
