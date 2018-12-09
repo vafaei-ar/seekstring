@@ -177,8 +177,12 @@ def check(name,model,dp):
 
 x_files = glob('./data/gaussian/map_p4096_0.0_*.npy')
 y_files = glob('./data/string/map1n_allz_rtaapixlw_4096_p*.npy')
+filt = filt=='ON'
+if filt:
+    def filt(x):
+        return ccg.filters(x,edd_method='sch')
 dp = DataProvider(x_files,y_files,alpha,nx=nx,ny=ny,
-                  n_buffer=2,reload_rate=10000)
+                  n_buffer=2,reload_rate=10000,filt=filt)
 
 model_add = './models/'+str(n_layers)+'_layers_f'+filt+'/'
 res_dir = './results/'+str(n_layers)+'_layers_f'+filt+'/'
