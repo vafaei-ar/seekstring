@@ -177,12 +177,12 @@ def check(name,model,dp):
 
 n_files = glob('./data/gaussian/g_2048_*.npy')
 s_files = glob('./data/string/s_2048_*.npy')
-filt = filt=='ON'
-if filt:
-    def filt(x):
+filtf = filt=='ON'
+if filtf:
+    def filtf(x):
         return ccg.filters(x,edd_method='sch')
 dp = DataProvider(n_files,s_files,alpha,nx=nx,ny=ny,
-                  n_buffer=len(n_files),filt=filt)
+                  n_buffer=len(n_files),filt=filtf)
                   
 model_add = './models/'+str(n_layers)+'_layers_f'+filt+'/'
 res_dir = './results/'+str(n_layers)+'_layers_f'+filt+'/'
