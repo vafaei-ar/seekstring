@@ -55,20 +55,19 @@ def get_slice(data,nx,ny):
     else:
         idy = np.random.randint(0, ly - ny)            
         sly = slice(idy, (idy+ny))
-    return slx, sly
+    return data[slx, sly]
 
 class DataProvider(object):
-    def __init__(self,n_files,s_files,alpha,
-                 nx=0,ny=0,n_buffer=10,reload_rate=10,filt=False):
+    def __init__(self,x_files,y_files,alpha,
+                 nx=0,ny=0,n_buffer=10,reload_rate=10):
         
 #        self.l1 = l1
 #        self.l2 = l2     
-        self.n_files = n_files
-        self.s_files = s_files
+        self.x_files = x_files
+        self.y_files = y_files
         
-        nmin = min(len(n_files),len(s_files))
-        if n_buffer>= nmin:
-            n_buffer = nmin
+        if n_buffer>= min(len(x_files),len(y_files)):
+            n_buffer = min(len(x_files),len(y_files))
             self.reload_rate = 0
             
         else:
@@ -77,65 +76,55 @@ class DataProvider(object):
         self.nx,self.ny = nx,ny
         self.n_buffer = n_buffer
         self.alpha = alpha
-        self.filt = filt
         self.counter = 0
         self.reload()
         
     def reload(self):
         print('Data provider is reloading...')
-        self.n_set = []
-        self.s_set = []
-        self.d_set = []
+        self.x_set = []
+        self.y_set = []
         
-        ninds = np.arange(len(self.n_files))
-        sinds = np.arange(len(self.s_files))
-        shuffle(ninds)
-        shuffle(sinds)
+        xinds = np.arange(len(self.x_files))
+        yinds = np.arange(len(self.y_files))
+        shuffle(xinds)
+        shuffle(yinds)
         for i in range(self.n_buffer):
-            filen = self.n_files[ninds[i]]
-            files = self.s_files[sinds[i]]
-            self.n_set.append(standard(np.load(filen)))
-            signal = standard(np.load(files))
-            self.s_set.append(signal)
-            if self.filt:
-                self.d_set.append(self.filt(signal))
-            else:
-                self.d_set.append(signal)
-            
+            filex = self.x_files[xinds[i]]
+            filey = self.y_files[yinds[i]]
+            self.x_set.append(standard(np.load(filex)))
+            yy = standard(np.load(filey))
+            if filt=='ON':
+                yy = ccg.filters(yy,edd_method='sch')
+            self.y_set.append(yy)
 
     def get_data(self): 
         self.counter += 1
         if self.reload_rate:
             if self.counter%self.reload_rate==0: self.reload() 
-        n = choice(self.n_set)
-        sind = choice(np.arange(self.n_buffer))
-        s = self.s_set[sind]
-        d = self.d_set[sind]
-        return n,s,d
+            
+        x = choice(self.x_set)
+        y = choice(self.y_set)
+        return x,y
               
 
-    def pre_process(self, n, s, d, alpha):
-        nslice = get_slice(n,self.nx,self.ny)
-        n = n[nslice]
-        sslice = get_slice(s,self.nx,self.ny)
-        s = s[sslice]
-        sn = n + alpha*s
-        d = d[sslice]
-        sn,d = np.expand_dims(sn,-1),np.expand_dims(d,-1)
-        return sn,d
+    def pre_process(self, x, y, alpha):
+        x,y = get_slice(x,self.nx,self.ny),get_slice(y,self.nx,self.ny)
+        x = x + alpha*y
+        x,y = np.expand_dims(x,-1),np.expand_dims(y,-1)
+        return x,y
     
     def __call__(self, n, alpha=None): 
     
         if alpha is None:
             alpha = self.alpha 
-#        x,y = self.get_data()
+        x,y = self.get_data()
         X = []
         Y = []
         for i in range(n):                
-            n,s,d = self.get_data()
-            sn,d = self.pre_process(n,s,d,alpha)
-            X.append(sn)
-            Y.append(d)
+            x,y = self.get_data()
+            x,y = self.pre_process(x,y,alpha)
+            X.append(x)
+            Y.append(y)
             
         X,Y = np.array(X),np.array(Y)
     
