@@ -2,20 +2,20 @@ TM:
 
 5_layers, filter:OFF, alpha:1.25
 
-5_layers, filter:ON, alpha:1.23
+5_layers, filter:ON, alpha:0.14
 
 7_layers, filter:OFF, alpha:1.18
 
-7_layers, filter:ON, alpha:alpha:1.3
+7_layers, filter:ON, alpha:alpha:0.29
 
 CS:
 
 5_layers, filter:OFF, alpha:0.44
 
-5_layers, filter:ON, alpha:9.3e-7
+5_layers, filter:ON, alpha:0.005
 
 7_layers, filter:OFF, alpha:0.88
 
-7_layers, filter:ON, alpha:3.19e-8
+7_layers, filter:ON, alpha:0.0003
 
 
